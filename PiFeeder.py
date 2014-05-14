@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding:utf-8
 #
 # PiFeeder.py  is an...
 #
@@ -37,6 +38,10 @@ GPIO.output(BeeperPin,False)
 
 
 servo = PWM.Servo()
+
+QuarterCup = .75
+FullServing = QuarterCup
+HalfServing = QuarterCup/2
 
 ###########################################
 # serv_CounterClockwise rotates a servo 
@@ -97,25 +102,31 @@ def beepBoop(sleepTime):
 #############################################
 def feedCat():
   #feed the cat
-  if (GPIO.input(PhotoPin1) == True):#if empty
+  if (GPIO.input(PhotoPin1) == True and GPIO.inpute(PhotoPin2) == True):#if empty
     beepBoop(.15)
     print "bowl empty"
     time.sleep(.5)
-    serv_Clockwise(ServoPin,2)
+    serv_Clockwise(ServoPin,FullServing)
     time.sleep(.5)
     serv_CounterClockwise(ServoPin,.1)
-  elif (GPIO.input(PhotoPin2) == True):#if not empty but not full
+  elif (GPIO.input(PhotoPin1) == True and GPIO.input(PhotoPin2) == False):#if not empty but not full
     beepBoop(.15)
     print "bowl not empty"
     time.sleep(.5)
-    serv_Clockwise(ServoPin,1.5)
+    serv_Clockwise(ServoPin, HalfServing)
     time.sleep(.5)
     serv_CounterClockwise(ServoPin,.05)
+  # Commented out b/c bowl isn't connected yet. this is default if bowl is not hooked up
+  #elif (GPIO.input(PhotoPin1) == False and GPIO.input(PhotoPin2) == False): #cat hasn't eaten previous meal
+    #print "OH NO PLEASE DONT BE DEAD"
+    #beepBoop(3)
+    #time.sleep(3)
+    #beepBoop(3)
   else: #assume empty
     beepBoop(.15)
     print "assumed bowl empty"
     time.sleep(.5)
-    serv_Clockwise(ServoPin,2)
+    serv_Clockwise(ServoPin,FullServing)
     time.sleep(.5)
     serv_CounterClockwise(ServoPin,.05)
     
@@ -190,8 +201,8 @@ while noTimeSet:
     noTimeSet = False
   elif timeSet.lower() == "n":
     print "Please set the time and run the program again"
-    print “This can be done with date —set i.e.”
-    print “sudo date --set=(quote)9 AUG 2013 16:15:00(quote) ”
+    print "This can be done with date —set i.e."
+    print "sudo date --set=(quote)9 AUG 2013 16:15:00(quote) "
     sys.exit()
   else:
     timeSet = raw_input("I'm sorry, I didn't get that. Try again (y/n)")
@@ -202,8 +213,8 @@ feedMinute1 = validMinute(1)
 feedHour2 = validHour(2)
 feedMinute2 = validMinute(2)
 
-print "Thank you, Pifeeder is now running”
-print ("Feeding times are " + feedHour1 + ":" + feedMinute1 + " and " + feedHour2 + ":" + feedMinute2 + ".")
+print "Thank you, Pifeeder is now running"
+print ("Feeding times are " + str(feedHour1) + ":" + str(feedMinute1) + " and " + str(feedHour2) + ":" + str(feedMinute2) + ".")
 
 
 catFed = False # switch to see whether we fed the cat this minute or not
@@ -220,7 +231,7 @@ while True:
   if time.strftime("%H") == str(feedHour2) and time.strftime("%M") == str(feedMinute2) and catFed == False:
     feedCat()
     catFed = True
-  if ((time.strftime(“%M”) == str(feedMinute1 + 1) or time.strftime(“%M”) == str(feedMinute2 +1)) and catFed == True):
+  if ((time.strftime("%M") == str(feedMinute1 + 1) or time.strftime("%M") == str(feedMinute2 +1)) and catFed == True):
       catFed = False #reset the switch... its been a minute
   
 
