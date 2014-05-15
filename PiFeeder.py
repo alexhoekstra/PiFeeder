@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# coding:utf-8 # weird bit error from pull from git. This was the fix
+# coding:utf-8 # weird bit error occuring from the pull from git. This was the fix
 #
 # PiFeeder.py  is an...
 #
