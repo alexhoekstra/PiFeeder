@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# coding:utf-8
+# coding:utf-8 # weird bit error from pull from git. This was the fix
 #
 # PiFeeder.py  is an...
 #
@@ -45,13 +45,12 @@ HalfServing = QuarterCup/2
 
 ###########################################
 # serv_CounterClockwise rotates a servo 
-#   in a CounterClockwise fashion. Studies
-#   from a major University(remains unnamed)
-#   show that cats prefer to be fed from a 
-#   clockwise rotating device. Since our 
-#   servo is mounted backwards, we will use 
-#   this function to cater to our 
-#   overlords will.
+#   in a CounterClockwise fashion. Cats 
+#   prefer to be fed from a Counterclockwise 
+#   rotating device and our servo is 
+#   mounted backwards 
+#   so we use this only to unstick
+#   stuck bits of tasty food
 ############################################
 def serv_CounterClockwise(ServoPIN,SleepTime):
   # Set servo on Servo1Pin to 2000s (2.0ms)
@@ -66,11 +65,13 @@ def serv_CounterClockwise(ServoPIN,SleepTime):
 
 ###########################################
 # serv_Clockwise rotates a servo in a 
-#   Clockwise fashion. Cats prefer to be
-#   fed from a clockwise rotating device
-#   and our servo is mounted backwards 
-#   so we use this only to unstick
-#   stuck bits of tasty food
+#   Clockwise fashion.  Studies
+#   from a major University(remains unnamed)
+#   show that cats prefer to be fed from a 
+#   Counter clockwise rotating device. 
+#   Since our servo is mounted backwards, 
+#   we will use this function to cater to our 
+#   overlords will.
 ############################################
 def serv_Clockwise(ServoPIN, SleepTime):
   # Set servo on ServoPin to 1200us (1.2ms)
@@ -141,7 +142,7 @@ def feedCat():
 ###############################################    
 def validHour(num):
   notSet = True
-  feedHour = input("What is the " + feedTime(num) + " hour you would like to feed him at? (24 hr format)")
+  feedHour = input("What is the " + feedTime(num) + " hour you would like to feed him at? (24 hr format, no leading zeros)")
   while notSet:  
     if (feedHour >= 0 and feedHour <= 24):
       notSet = False
@@ -160,7 +161,7 @@ def validHour(num):
 ###############################################  
 def validMinute(num):
   notSet = True
-  feedMinute = input("What is the " + feedTime(num) +" minute would like to feed him at? (60 min format)")
+  feedMinute = input("What is the " + feedTime(num) +" minute would like to feed him at? (60 min format, no leading zeros)")
   while notSet:  
     if (feedMinute >= 0 and feedMinute <= 60):
       notSet = False
@@ -187,34 +188,43 @@ def feedTime(num):
 # on a raspberry because the internal clock gets cooky
 # when off power for a short period of time
 
-timeSet = raw_input("Have you remembered to set the clock? (y/n)") 
 
-noTimeSet = True
+feedTimes = raw_input("Would you like to set times to feed the cat?(y/n)")
+feedAtTimes = False
 
-# if the user set the time.. were all cool,
-# if they didn’t, we tell him what’s what and exit the program
-# if they enter a weird value in… humans do that sometimes,
-# then we ask them again
+if feedTimes.lower() == "y":
+  timeSet = raw_input("Have you remembered to set the clock? (y/n)") 
+  noTimeSet = True
 
-while noTimeSet:
-  if timeSet.lower() == "y":
-    noTimeSet = False
-  elif timeSet.lower() == "n":
-    print "Please set the time and run the program again"
-    print "This can be done with date —set i.e."
-    print "sudo date --set=(quote)9 AUG 2013 16:15:00(quote) "
-    sys.exit()
-  else:
-    timeSet = raw_input("I'm sorry, I didn't get that. Try again (y/n)")
+  # if the user set the time.. were all cool,
+  # if they didn’t, we tell him what’s what and exit the program
+  # if they enter a weird value in… humans do that sometimes,
+  # then we ask them again
 
-# setting when our masters want to be fed.
-feedHour1 = validHour(1)
-feedMinute1 = validMinute(1)
-feedHour2 = validHour(2)
-feedMinute2 = validMinute(2)
+  while noTimeSet:
+    if timeSet.lower() == "y":
+      noTimeSet = False
+    elif timeSet.lower() == "n":
+      print "Please set the time and run the program again"
+      print "This can be done with date —set i.e."
+      print "sudo date --set=(quote)9 AUG 2013 16:15:00(quote) "
+      sys.exit()
+    else:
+      timeSet = raw_input("I'm sorry, I didn't get that. Try again (y/n)")
 
+  feedAtTimes = True
+  # setting when our masters want to be fed.
+  feedHour1 = validHour(1)
+  feedMinute1 = validMinute(1)
+  feedHour2 = validHour(2)
+  feedMinute2 = validMinute(2)
+  print ("Feeding times are " + str(feedHour1) + ":" + str(feedMinute1) + " and " + str(feedHour2) + ":" + str(feedMinute2) + ".")
+
+#Everythings all set! lets get running!
 print "Thank you, Pifeeder is now running"
-print ("Feeding times are " + str(feedHour1) + ":" + str(feedMinute1) + " and " + str(feedHour2) + ":" + str(feedMinute2) + ".")
+beepBoop(.2)
+beepBoop(.2)
+
 
 
 catFed = False # switch to see whether we fed the cat this minute or not
@@ -224,14 +234,16 @@ catFed = False # switch to see whether we fed the cat this minute or not
 # loop … forever … theres no way out of this
 while True:
   if(GPIO.input(ButtonPin) == True):
+    print "Button Pressed"
     feedCat()
-  if time.strftime("%H") == str(feedHour1) and time.strftime("%M") == str(feedMinute1) and catFed == False:
-    feedCat()
-    catFed = True
-  if time.strftime("%H") == str(feedHour2) and time.strftime("%M") == str(feedMinute2) and catFed == False:
-    feedCat()
-    catFed = True
-  if ((time.strftime("%M") == str(feedMinute1 + 1) or time.strftime("%M") == str(feedMinute2 +1)) and catFed == True):
+  if feedAtTimes:
+    if time.strftime("%H") == str(feedHour1) and time.strftime("%M") == str(feedMinute1) and catFed == False:
+      feedCat()
+      catFed = True
+    if time.strftime("%H") == str(feedHour2) and time.strftime("%M") == str(feedMinute2) and catFed == False:
+      feedCat()
+      catFed = True
+    if ((time.strftime("%M") == str(feedMinute1 + 1) or time.strftime("%M") == str(feedMinute2 +1)) and catFed == True):
       catFed = False #reset the switch... its been a minute
   
 
