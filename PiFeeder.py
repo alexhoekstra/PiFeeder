@@ -215,7 +215,7 @@ def main():
         feeder.feedCat()
         catFed = True
       if time.strftime("%H") == feed_time_2[0] and time.strftime("%M") == feed_time_2[1] and catFed == False:
-        feeder.the feedCat()
+        feeder.feedCat()
         catFed = True
       if (time.strftime("%M") == str(int(feed_time_1[0])+1) or time.strftime("%M") == str(int(feed_time_2[0])+1) and catFed == True):
         print str(int(feed_time_1[0]) +1)
