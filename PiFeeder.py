@@ -44,6 +44,9 @@ class PiFeeder():
     self.FullServing = QuarterCup
     self.HalfServing = QuarterCup/2
 
+    self.beepBoop(.2)
+    self.beepBoop(.2)
+
 ###########################################
 # serv_CounterClockwise rotates a servo 
 #   in a CounterClockwise fashion. Cats 
@@ -193,8 +196,8 @@ def main():
   print "Thank you, Pifeeder is now running"
 
   feeder = PiFeeder()
-  feeder.beepBoop(.2)
-  feeder.beepBoop(.2)
+  #feeder.beepBoop(.2)
+  #feeder.beepBoop(.2)
 
   catFed = False # switch to see whether we fed the cat this minute or not
                # this is done so we can use the button if our cat requires
