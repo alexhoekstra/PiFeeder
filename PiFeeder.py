@@ -20,7 +20,7 @@ import sys               # To close if the human makes an error
 
 
 class PiFeeder():
-  def __init(self):
+  def __init__(self):
   #Set up the GPIO pins before we initialize them
     self.ServoPin=18
     self.ButtonPin=22
