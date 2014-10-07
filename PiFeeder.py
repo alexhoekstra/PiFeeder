@@ -89,7 +89,7 @@ class PiFeeder():
 #   announcing that our master of the 
 #   houses food is ready for his consumption
 #############################################
-  def beepBoop(sleepTime):
+  def beepBoop(self,sleepTime):
     GPIO.output(self.BeeperPin, True)
     time.sleep(sleepTime)
     GPIO.output(self.BeeperPin,False)
@@ -145,7 +145,7 @@ class PiFeeder():
 def get_Time(num):
   invalidTime = True
   while (invalidTime):
-    time = raw_input("Please enter time " + num + "seperating hour and minute by spaces (i.e 22 30)").split()
+    time = raw_input("Please enter time " + num + " seperating hour and minute by spaces (i.e 22 30)").split()
     if int(time[0]) > 23:
       print "invalid hour"
     elif int(time[1]) > 59:
