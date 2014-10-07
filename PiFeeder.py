@@ -41,8 +41,8 @@ class PiFeeder():
     self.servo = PWM.Servo()
   #Size portions for servo sleeps
     self.QuarterCup = .75
-    self.FullServing = QuarterCup
-    self.HalfServing = QuarterCup/2
+    self.FullServing = self.QuarterCup
+    self.HalfServing = self.QuarterCup/2
 
     self.beepBoop(.2)
     self.beepBoop(.2)
