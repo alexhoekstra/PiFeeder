@@ -198,12 +198,6 @@ def main():
   print "Thank you, Pifeeder is now running"
 
   feeder = PiFeeder()
-  #feeder.beepBoop(.2)
-  #feeder.beepBoop(.2)
-
-  catFed = False # switch to see whether we fed the cat this minute or not
-               # this is done so we can use the button if our cat requires
-               # more food than was put out... some cats are pretty fat...
 
   # loop … forever … theres no way out of this
   while True:
@@ -211,16 +205,14 @@ def main():
       print "Button Pressed"
       feeder.feedCat()
     if feedAtTimes:
-      if time.strftime("%H") == feed_time_1[0] and time.strftime("%M") == feed_time_1[1] and catFed == False:
+      if time.strftime("%H") == feed_time_1[0] and time.strftime("%M") == feed_time_1[1]:
         feeder.feedCat()
         catFed = True
-        print str(int(feed_time_1[0]) +1)
-      if time.strftime("%H") == feed_time_2[0] and time.strftime("%M") == feed_time_2[1] and catFed == False:
+        time.sleep(61)
+      if time.strftime("%H") == feed_time_2[0] and time.strftime("%M") == feed_time_2[1]:
         feeder.feedCat()
         catFed = True
-      if (time.strftime("%M") == str(int(feed_time_1[0])+1) or time.strftime("%M") == str(int(feed_time_2[0])+1) and catFed == True):
-        print str(int(feed_time_1[0]) +1)
-        catFed = False #reset the switch... its been a minute
+        time.sleep(61)
 
 if __name__ == "__main__": 
   main()
