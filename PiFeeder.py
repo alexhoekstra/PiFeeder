@@ -212,10 +212,10 @@ def main():
       feeder.feedCat()
     if feedAtTimes:
       if time.strftime("%H") == feed_time_1[0] and time.strftime("%M") == feed_time_1[1] and catFed == False:
-        feedCat()
+        feeder.feedCat()
         catFed = True
       if time.strftime("%H") == feed_time_2[0] and time.strftime("%M") == feed_time_2[1] and catFed == False:
-        feedCat()
+        feeder.feedCat()
         catFed = True
       if (time.strftime("%M") == str(int(feed_time_1[0])+1) or time.strftime("%M") == str(int(feed_time_2[0])+1) and catFed == True):
         catFed = False #reset the switch... its been a minute
