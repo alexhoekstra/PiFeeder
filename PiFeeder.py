@@ -64,7 +64,7 @@ class PiFeeder():
   # rotates ccw 
   # thanks to David Bryan
     self.servo.set_servo(ServoPIN, 2000)
-    time.sleep(self.SleepTime)
+    time.sleep(SleepTime)
     self.servo.stop_servo(ServoPIN)
     time.sleep(.25)
 
