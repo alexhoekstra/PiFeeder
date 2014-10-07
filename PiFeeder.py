@@ -47,6 +47,9 @@ class PiFeeder():
     self.beepBoop(.2)
     self.beepBoop(.2)
 
+  def button_pressed(self):
+    return GPIO.input(self.ButtonPin)
+
 ###########################################
 # serv_CounterClockwise rotates a servo 
 #   in a CounterClockwise fashion. Cats 
@@ -64,7 +67,6 @@ class PiFeeder():
     time.sleep(self.SleepTime)
     self.servo.stop_servo(ServoPIN)
     time.sleep(.25)
-
 
 
 ###########################################
@@ -205,7 +207,7 @@ def main():
 
   # loop … forever … theres no way out of this
   while True:
-    if(GPIO.input(feeder.ButtonPin) == True):
+    if(feeder.button_pressed()):
       print "Button Pressed"
       feeder.feedCat()
     if feedAtTimes:
