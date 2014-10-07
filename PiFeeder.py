@@ -150,6 +150,8 @@ def get_Time(num):
       print "invalid hour"
     elif int(time[1]) > 59:
       print "invalid minute"
+    else:
+      invalidTime = False
   return time
 
 # Ask the user if the time was set. This needs to be done
