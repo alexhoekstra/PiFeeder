@@ -22,27 +22,27 @@ import sys               # To close if the human makes an error
 class PiFeeder():
   def __init(self):
   #Set up the GPIO pins before we initialize them
-  self.ServoPin=18
-  self.ButtonPin=22
-  self.BeeperPin=24
-  self.PhotoPin1=17
-  self.PhotoPin2=21
+    self.ServoPin=18
+    self.ButtonPin=22
+    self.BeeperPin=24
+    self.PhotoPin1=17
+    self.PhotoPin2=21
 
 #Initialize each pin and set GPIO mode
-  GPIO.setmode(GPIO.BCM)
-  GPIO.setup(self.ButtonPin,GPIO.IN)
-  GPIO.setup(self.BeeperPin,GPIO.OUT)
-  GPIO.setup(self.PhotoPin1,GPIO.IN)
-  GPIO.setup(self.PhotoPin2,GPIO.IN)
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(self.ButtonPin,GPIO.IN)
+    GPIO.setup(self.BeeperPin,GPIO.OUT)
+    GPIO.setup(self.PhotoPin1,GPIO.IN)
+    GPIO.setup(self.PhotoPin2,GPIO.IN)
 
 #make sure beeper is off
-  GPIO.output(self.BeeperPin,False)
+    GPIO.output(self.BeeperPin,False)
   #init our servo
-  self.servo = PWM.Servo()
+    self.servo = PWM.Servo()
   #Size portions for servo sleeps
-  self.QuarterCup = .75
-  self.FullServing = QuarterCup
-  self.HalfServing = QuarterCup/2
+    self.QuarterCup = .75
+    self.FullServing = QuarterCup
+    self.HalfServing = QuarterCup/2
 
 ###########################################
 # serv_CounterClockwise rotates a servo 
