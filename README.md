@@ -20,6 +20,9 @@ Run the program
   
 ##Dependencies
 
-RaspberryPi
+RPIO
 
-Python GPIO.PWM module
+### Installation of RPIO ###
+
+	$ sudo apt-get install python-setuptools
+	$ sudo easy_install -U RPIO

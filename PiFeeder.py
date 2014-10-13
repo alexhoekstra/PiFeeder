@@ -8,9 +8,6 @@
 # to announce when it is time for the cat to eat. Provides a feedback
 # loop for determining how much food to dole out.
 # 
-# Hardware help came from http://drstrangelove.net/2013/12/raspberry-pi-power-cat-feeder-updates/
-# David Bryan’s Blog
-# (IE help with how to set servo clockwise and counter clockwise and with a basic breadboard layout)
 #
 
 from RPIO import PWM     # PWM is the pulse width modulation library for a servo
@@ -62,7 +59,6 @@ class PiFeeder():
   def serv_CounterClockwise(self,ServoPIN,SleepTime):
   # Set servo on Servo1Pin to 2000s (2.0ms)
   # rotates ccw 
-  # thanks to David Bryan
     self.servo.set_servo(ServoPIN, 2000)
     time.sleep(SleepTime)
     self.servo.stop_servo(ServoPIN)
@@ -82,7 +78,6 @@ class PiFeeder():
   def serv_Clockwise(self,ServoPIN, SleepTime):
   # Set servo on ServoPin to 1200us (1.2ms)
   # This rotates the servo CW.
-  # thanks to David Bryan
     self.servo.set_servo(ServoPIN, 1200)
     time.sleep(SleepTime)
     self.servo.stop_servo(ServoPIN)
@@ -213,6 +208,8 @@ def main():
         feeder.feedCat()
         catFed = True
         time.sleep(61)
+
+
 
 if __name__ == "__main__": 
   main()
