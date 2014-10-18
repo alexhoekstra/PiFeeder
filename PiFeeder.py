@@ -16,7 +16,7 @@ import RPi.GPIO as GPIO  # We need a way to send out and receive info lets use G
 import sys               # To close if the human makes an error
 
 
-class PiFeeder():
+class Servo():
   def __init__(self,servo_pin,button_pin,beeper_pin):
   #Set up the GPIO pins before we initialize them
     self.ServoPin  = servo_pin  #18
@@ -89,15 +89,14 @@ class PiFeeder():
     GPIO.output(self.BeeperPin,False)
     time.sleep(sleepTime)
 
- '''
- feedCat analyzes the bowl to see how much
-   if any food remains in the bowl and then
-   dishes out the correct portion of food.
-   Humans always get it wrong so this will
-   ensure the Cats are happy.
- '''
-
-  def feedCat(self):
+  '''
+  feed_cat analyzes the bowl to see how much
+    if any food remains in the bowl and then
+    dishes out the correct portion of food.
+    Humans always get it wrong so this will
+    ensure the Cats are happy.
+  '''
+  def feed_cat(self):
   #feed the cat
     self.beepBoop(.15)
     time.sleep(.5)
@@ -105,33 +104,50 @@ class PiFeeder():
     time.sleep(.5)
     self.serv_CounterClockwise(self.ServoPin,.05)
     
- '''
- validHour(num) receives a number which will
-   then prompt the user with the grammatically
-   correct version for when our overlords would
-   like to be fed. It checks that number to
-   see if it exists within the 24 hour clock
-   and if it does, returns it, if not, prompts
-   the user for a valid hour
- '''
 
-def get_Time(num):
-  invalidTime = True
-  while (invalidTime):
-    time = raw_input("Please enter time " + num + " seperating hour and minute by spaces (i.e 22 30)").split()
-    if int(time[0]) > 23:
-      print "invalid hour"
-    elif int(time[1]) > 59:
-      print "invalid minute"
-    else:
-      invalidTime = False
-  return time
+class PiFeeder():
+  def __init__(self):
+    self.servo1 = Servo(18,22,24)
+
+
+  def get_Time(self,num):
+    invalidTime = True
+    while (invalidTime):
+      time = raw_input("Please enter time " + num + " seperating hour and minute by spaces (i.e 22 30)").split()
+      if int(time[0]) > 23:
+        print "invalid hour"
+      elif int(time[1]) > 59:
+        print "invalid minute"
+      else:
+        invalidTime = False
+    return time
+
+  def feed_time(self,time1,time2):
+    if time.strftime("%H") == time1[0] and time.strftime("%M") == time1[1]:
+      self.servo1.feed_cat()
+      catFed = True
+      time.sleep(61)#there is a better way
+    if time.strftime("%H") == time2[0] and time.strftime("%M") == time2[1]:
+      self.servo1.feed_cat()
+      catFed = True
+      time.sleep(61)#there is a better way
+
+  def button1_pushed(self):
+    return self.servo1.button_pressed()
+
+  def force_feed(self, servo):
+    if servo == 1:
+      self.servo1.feed_cat()
+
 
 # Ask the user if the time was set. This needs to be done
 # on a raspberry because the internal clock gets cooky
 # when off power for a short period of time
 
 def main():
+  
+  feeder = PiFeeder()
+
   feedTimes = raw_input("Would you like to set times to feed the cat?(y/n)")
   feedAtTimes = False
 
@@ -163,24 +179,15 @@ def main():
     print ("Feeding times are " + feed_time_1[0] + ":" + feed_time_1[1] + " and " + feed_time_2[0] + ":" + feed_time_2[1] + ".")
 
   #Everythings all set! lets get running!
-  print "Thank you, Pifeeder is now running"
-
-  feeder = PiFeeder()
+  print "Thank you, PiFeeder is now running"
 
   # loop … forever … theres no way out of this
   while True:
-    if(feeder.button_pressed()):
+    if(feeder.button1_pushed()):
       print "Button Pressed"
-      feeder.feedCat()
-    if feedAtTimes:
-      if time.strftime("%H") == feed_time_1[0] and time.strftime("%M") == feed_time_1[1]:
-        feeder.feedCat()
-        catFed = True
-        time.sleep(61)
-      if time.strftime("%H") == feed_time_2[0] and time.strftime("%M") == feed_time_2[1]:
-        feeder.feedCat()
-        catFed = True
-        time.sleep(61)
+      feeder.force_feed()
+    feeder.feed_time(feed_time_1, feed_time_2)
+    
 
 
 
