@@ -17,13 +17,11 @@ import sys               # To close if the human makes an error
 
 
 class PiFeeder():
-  def __init__(self):
+  def __init__(self,servo_pin,button_pin,beeper_pin):
   #Set up the GPIO pins before we initialize them
-    self.ServoPin=18
-    self.ButtonPin=22
-    self.BeeperPin=24
-    self.PhotoPin1=17
-    self.PhotoPin2=21
+    self.ServoPin  = servo_pin  #18
+    self.ButtonPin = button_pin #22
+    self.BeeperPin = beeper_pin #24
 
 #Initialize each pin and set GPIO mode
     GPIO.setmode(GPIO.BCM)
@@ -46,16 +44,15 @@ class PiFeeder():
 
   def button_pressed(self):
     return GPIO.input(self.ButtonPin)
-
-###########################################
-# serv_CounterClockwise rotates a servo 
-#   in a CounterClockwise fashion. Cats 
-#   prefer to be fed from a Counterclockwise 
-#   rotating device and our servo is 
-#   mounted backwards 
-#   so we use this only to unstick
-#   stuck bits of tasty food
-############################################
+ '''
+ serv_CounterClockwise rotates a servo 
+   in a CounterClockwise fashion. Cats 
+   prefer to be fed from a Counterclockwise 
+   rotating device and our servo is 
+   mounted backwards 
+   so we use this only to unstick
+   stuck bits of tasty food
+ '''
   def serv_CounterClockwise(self,ServoPIN,SleepTime):
   # Set servo on Servo1Pin to 2000s (2.0ms)
   # rotates ccw 
@@ -64,17 +61,16 @@ class PiFeeder():
     self.servo.stop_servo(ServoPIN)
     time.sleep(.25)
 
-
-###########################################
-# serv_Clockwise rotates a servo in a 
-#   Clockwise fashion.  Studies
-#   from a major University(remains unnamed)
-#   show that cats prefer to be fed from a 
-#   Counter clockwise rotating device. 
-#   Since our servo is mounted backwards, 
-#   we will use this function to cater to our 
-#   overlords will.
-############################################
+ '''
+ serv_Clockwise rotates a servo in a 
+   Clockwise fashion.  Studies
+   from a major University(remains unnamed)
+   show that cats prefer to be fed from a 
+   Counter clockwise rotating device. 
+   Since our servo is mounted backwards, 
+   we will use this function to cater to our 
+   overlords will.
+ '''
   def serv_Clockwise(self,ServoPIN, SleepTime):
   # Set servo on ServoPin to 1200us (1.2ms)
   # This rotates the servo CW.
@@ -84,63 +80,41 @@ class PiFeeder():
     time.sleep(.25)
 
 
-#############################################
-# beepBoop beeps the hooper er … beeper
-#   announcing that our master of the 
-#   houses food is ready for his consumption
-#############################################
+'''
+ beepBoop beeps the hooper er … beeper
+   announcing that our master of the 
+   houses food is ready for his consumption
+'''
   def beepBoop(self,sleepTime):
     GPIO.output(self.BeeperPin, True)
     time.sleep(sleepTime)
     GPIO.output(self.BeeperPin,False)
 
+ '''
+ feedCat analyzes the bowl to see how much
+   if any food remains in the bowl and then
+   dishes out the correct portion of food.
+   Humans always get it wrong so this will
+   ensure the Cats are happy.
+ '''
 
-#############################################
-# feedCat analyzes the bowl to see how much
-#   if any food remains in the bowl and then
-#   dishes out the correct portion of food.
-#   Humans always get it wrong so this will
-#   ensure the Cats are happy.
-#############################################
   def feedCat(self):
   #feed the cat
-    if (GPIO.input(self.PhotoPin1) == True and GPIO.inpute(self.PhotoPin2) == True):#if empty
-      beepBoop(.15)
-      print "bowl empty"
-      time.sleep(.5)
-      self.serv_Clockwise(self.ServoPin,self.FullServing)
-      time.sleep(.5)
-      self.serv_CounterClockwise(self.ServoPin,.1)
-    elif (GPIO.input(self.PhotoPin1) == True and GPIO.input(self.PhotoPin2) == False):#if not empty but not full
-      self.beepBoop(.15)
-      print "bowl not empty"
-      time.sleep(.5)
-      self.serv_Clockwise(self.ServoPin, self.HalfServing)
-      time.sleep(.5)
-      self.serv_CounterClockwise(self.ServoPin,.05)
-  # Commented out b/c bowl isn't connected yet. this is default if bowl is not hooked up
-  #elif (GPIO.input(PhotoPin1) == False and GPIO.input(PhotoPin2) == False): #cat hasn't eaten previous meal
-    #print "OH NO PLEASE DONT BE DEAD"
-    #beepBoop(3)
-    #time.sleep(3)
-    #beepBoop(3)
-    else: #assume empty
-      self.beepBoop(.15)
-      print "assumed bowl empty"
-      time.sleep(.5)
-      self.serv_Clockwise(self.ServoPin,self.FullServing)
-      time.sleep(.5)
-      self.serv_CounterClockwise(self.ServoPin,.05)
+    self.beepBoop(.15)
+    time.sleep(.5)
+    self.serv_Clockwise(self.ServoPin,self.FullServing)
+    time.sleep(.5)
+    self.serv_CounterClockwise(self.ServoPin,.05)
     
-###############################################  
-# validHour(num) receives a number which will
-#   then prompt the user with the grammatically
-#   correct version for when our overlords would
-#   like to be fed. It checks that number to
-#   see if it exists within the 24 hour clock
-#   and if it does, returns it, if not, prompts
-#   the user for a valid hour
-###############################################    
+ '''
+ validHour(num) receives a number which will
+   then prompt the user with the grammatically
+   correct version for when our overlords would
+   like to be fed. It checks that number to
+   see if it exists within the 24 hour clock
+   and if it does, returns it, if not, prompts
+   the user for a valid hour
+ '''
 
 def get_Time(num):
   invalidTime = True
