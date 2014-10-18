@@ -109,19 +109,6 @@ class PiFeeder():
   def __init__(self):
     self.servo1 = Servo(18,22,24)
 
-
-  def get_Time(self,num):
-    invalidTime = True
-    while (invalidTime):
-      time = raw_input("Please enter time " + num + " seperating hour and minute by spaces (i.e 22 30)").split()
-      if int(time[0]) > 23:
-        print "invalid hour"
-      elif int(time[1]) > 59:
-        print "invalid minute"
-      else:
-        invalidTime = False
-    return time
-
   def feed_time(self,time1,time2):
     if time.strftime("%H") == time1[0] and time.strftime("%M") == time1[1]:
       self.servo1.feed_cat()
@@ -143,6 +130,19 @@ class PiFeeder():
 # Ask the user if the time was set. This needs to be done
 # on a raspberry because the internal clock gets cooky
 # when off power for a short period of time
+
+
+def get_Time(num):
+    invalidTime = True
+    while (invalidTime):
+      time = raw_input("Please enter time " + num + " seperating hour and minute by spaces (i.e 22 30)").split()
+      if int(time[0]) > 23:
+        print "invalid hour"
+      elif int(time[1]) > 59:
+        print "invalid minute"
+      else:
+        invalidTime = False
+    return time
 
 def main():
   
