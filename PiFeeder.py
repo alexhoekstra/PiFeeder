@@ -35,9 +35,7 @@ class PiFeeder():
   #init our servo
     self.servo = PWM.Servo()
   #Size portions for servo sleeps
-    self.QuarterCup = .75
-    self.FullServing = self.QuarterCup
-    self.HalfServing = self.QuarterCup/2
+    self.FullServing = .75
 
     self.beepBoop(.2)
     self.beepBoop(.2)
@@ -89,6 +87,7 @@ class PiFeeder():
     GPIO.output(self.BeeperPin, True)
     time.sleep(sleepTime)
     GPIO.output(self.BeeperPin,False)
+    time.sleep(sleepTime)
 
  '''
  feedCat analyzes the bowl to see how much
